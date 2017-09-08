@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <h1>{{title}}</h1>
+        <ul>
+            {{#optionSupport}}
+            <li>{{name}}: {{support}} {{../symbol}} ({{pct}}%)</li>
+            {{/optionSupport}}
+        </ul>
+        <p>Total voters: {{totalVoters}} {{symbol}} ({{quorumPct}}% of supply)</p>
+    </body>
+</html>

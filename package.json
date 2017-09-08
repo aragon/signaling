@@ -5,7 +5,9 @@
   "main": "server/index.js",
   "dependencies": {
     "ethereumjs-testrpc": "^4.1.1",
+    "handlebars": "^4.0.10",
     "truffle": "^3.4.9",
+    "truffle-contract": "^2.0.5",
     "truffle-hdwallet-provider": "0.0.3",
     "webshot": "^0.18.0"
   },

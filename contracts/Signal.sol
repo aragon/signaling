@@ -10,12 +10,12 @@ contract MiniMeToken {
 }
 */
 contract Signal {
-    MiniMeToken public token;
-    string public title;
-    uint8 public optionsCount;
-    string public optionsDescription;
-    uint64 public closes;
-    uint256 public snapshotBlock;
+    MiniMeToken token;
+    string title;
+    uint8 optionsCount;
+    string optionsDescription;
+    uint64 closes;
+    uint256 snapshotBlock;
 
     mapping (uint8 => uint256) public optionSupport;
     mapping (address => uint8) public signaledOption;
@@ -45,6 +45,10 @@ contract Signal {
 
         Signaled(signaler, _option, stake);
         Transfer(signaler, _option * 256**19, stake); // trick etherscan to show event
+    }
+
+    function get() constant returns (address, string, uint8, string, uint64, uint256) {
+        return (token, title, optionsCount, optionsDescription, closes, snapshotBlock);
     }
 
     function name() returns (string) {
