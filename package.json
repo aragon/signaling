@@ -1,0 +1,18 @@
+{
+  "name": "governance-signaling",
+  "version": "1.0.0",
+  "description": "On-chain signaling for governance proposals",
+  "main": "server/index.js",
+  "dependencies": {
+    "ethereumjs-testrpc": "^4.1.1",
+    "truffle": "^3.4.9",
+    "truffle-hdwallet-provider": "0.0.3",
+    "webshot": "^0.18.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jorge Izquierdo (Aragon)",
+  "license": "GPVv3"
+}
