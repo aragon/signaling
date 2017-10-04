@@ -5,9 +5,7 @@
     <a-header />
     <a-section>
       <div>
-        <div v-for="proposal in proposals">
-          {{ proposal.title }}
-        </div>
+        <proposal v-for="proposal in proposals" :proposal="proposal" :key="proposal.url" :title="proposal.title"></proposal>
       </div>
     </a-section>
   </div>
@@ -16,12 +14,15 @@
 <script>
   import { listProposals } from 'src/data-fetcher'
   import { aBaseStyles, aHeader, aSection } from 'toolkit'
+  import proposal from '../proposal/proposal.vue'
 
   export default {
     components: {
       aBaseStyles,
       aHeader,
       aSection,
+
+      proposal,
     },
     data() {
       return {
