@@ -6,7 +6,7 @@ import "./Signal.sol";
 contract SignalsRegistry is Owned {
     MiniMeToken token;
 
-    uint256[] public allSignalIds;
+    uint256[] allSignalIds;
     mapping (uint256 => Signal) public signals;
 
     event SignalSet(uint256 signalId, address signal);
@@ -28,4 +28,6 @@ contract SignalsRegistry is Owned {
 
         SignalSet(_signalId, _signal);
     }
+
+    function getAllSignalsIds() constant returns (uint256[]) { return allSignalIds; }
 }
