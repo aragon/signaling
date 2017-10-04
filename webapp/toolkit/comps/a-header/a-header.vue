@@ -43,6 +43,7 @@
   .header {
     background: var(--white);
     border-bottom: 1px solid #e8e8e8;
+    margin-bottom: 30px;
     & .button {
       margin-left: 10px;
     }

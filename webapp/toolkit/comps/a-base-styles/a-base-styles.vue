@@ -52,7 +52,7 @@
   button,
   select,
   input {
-    color: var(--grey600);
+    color: var(--grey700);
   }
   strong,
   b {
