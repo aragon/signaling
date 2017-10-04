@@ -2,13 +2,6 @@ pragma solidity 0.4.15;
 
 import "./MiniMeToken.sol";
 
-/*
-contract MiniMeToken {
-    uint8 public decimals;
-    function balanceOfAt(address _owner, uint _blockNumber) constant
-        returns (uint);
-}
-*/
 contract Signal {
     MiniMeToken token;
     string title;
@@ -44,19 +37,10 @@ contract Signal {
         signaledOption[signaler] = _option;
 
         Signaled(signaler, _option, stake);
-        Transfer(signaler, _option * 256**19, stake); // trick etherscan to show event
     }
 
     function get() constant returns (address, string, uint8, string, uint64, uint256) {
         return (token, title, optionsCount, optionsDescription, closes, snapshotBlock);
-    }
-
-    function name() returns (string) {
-        return title;
-    }
-
-    function decimals() returns (uint256) {
-        return token.decimals();
     }
 
     event Transfer(address indexed from, address indexed to, uint256 amount);
