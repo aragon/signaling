@@ -5,6 +5,6 @@ The Aragon Signaling App implements is a client-side dapp to let ANT holders vot
 ## Running it locally
 
 ```javascript
-npm -i
+npm i
 TODO
 ```
