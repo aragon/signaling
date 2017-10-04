@@ -1,7 +1,6 @@
 <template>
   <div class="signaling">
     <a-base-styles />
-
     <a-header />
     <a-section>
       <div>
@@ -12,7 +11,7 @@
 </template>
 
 <script>
-  import { listProposals } from 'src/data-fetcher'
+  import { onProposalsUpdate } from 'src/data-fetcher'
   import { aBaseStyles, aHeader, aSection } from 'toolkit'
   import proposal from '../proposal/proposal.vue'
 
@@ -21,7 +20,6 @@
       aBaseStyles,
       aHeader,
       aSection,
-
       proposal,
     },
     data() {
@@ -29,8 +27,13 @@
         proposals: [],
       }
     },
-    async created() {
-      this.proposals = await listProposals()
+    methods: {
+      handleProposalUpdate(proposals) {
+        this.proposals = proposals
+      },
+    },
+    created() {
+      onProposalsUpdate(this.handleProposalUpdate)
     }
   }
 </script>
