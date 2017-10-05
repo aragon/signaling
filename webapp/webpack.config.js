@@ -30,7 +30,10 @@ module.exports = {
       toolkit: path.resolve(__dirname, 'toolkit/'),
     },
   },
-  plugins: [new HtmlWebpackPlugin({ title: 'Signaling' })],
+  plugins: [new HtmlWebpackPlugin({
+    title: 'Aragon Signaling',
+    favicon: './toolkit/comps/a-header/assets/isotype.svg'
+  })],
   output: {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist'),
