@@ -1,6 +1,6 @@
 import 'babel-polyfill'
 import Vue from 'vue'
-import signaling from 'comps/signaling/signaling.vue'
+import app from 'comps/app/app.vue'
 
 Vue.config.productionTip = false
 
@@ -16,5 +16,5 @@ const initAppElement = (id = '#app') => {
 
 new Vue({
   el: initAppElement(),
-  render: h => h(signaling),
+  render: h => h(app),
 })

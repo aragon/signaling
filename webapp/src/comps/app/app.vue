@@ -1,5 +1,5 @@
 <template>
-  <div class="signaling">
+  <div class="app">
     <a-base-styles />
     <a-header title="Signaling" />
     <a-section>
@@ -63,7 +63,7 @@
     line-height: 2;
     margin: 60px 10px;
   }
-  .signaling .proposal {
+  .app .proposal {
     margin-bottom: 40px;
   }
 </style>
