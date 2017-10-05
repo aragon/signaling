@@ -4,7 +4,11 @@
     <a-header />
     <a-section>
       <div>
-        <proposal v-for="proposal in proposals" :proposal="proposal" :key="proposal.url" :title="proposal.title"></proposal>
+        <proposal
+          v-for="proposal in proposals"
+          :proposal="proposal"
+          :key="proposal.url"
+        />
       </div>
     </a-section>
   </div>
@@ -20,17 +24,17 @@
       aBaseStyles,
       aHeader,
       aSection,
-      proposal,
+      proposal
     },
     data() {
       return {
-        proposals: [],
+        proposals: []
       }
     },
     methods: {
       handleProposalUpdate(proposals) {
         this.proposals = proposals
-      },
+      }
     },
     created() {
       onProposalsUpdate(this.handleProposalUpdate)

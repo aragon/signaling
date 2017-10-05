@@ -3,9 +3,16 @@
     <h3>{{ proposal.title }}</h3>
     <div class="endDate">{{ proposal.endDate }}Ends on 15 Nov 2017</div>
     <ul>
-      <li v-for="option in options" :key="option.id">
-        <div>{{option.text}}</div>
-        <progress :value="option.support" max="100"></progress><span>{{option.support}} ANT</span>
+      <li v-for="option in proposal.options">
+        <div>{{option.label}}</div>
+        <progress
+          :value="Math.round(option.support * 100)"
+          max="100"
+        />
+        <span>
+          {{option.total}}
+          {{proposal.symbol}}
+        </span>
       </li>
     </ul>
   </div>
@@ -13,30 +20,14 @@
 
 <script>
   export default {
-    props: [
-      'proposal'
-    ],
-    data() {
-      return {
-        options: [{
-          id: 0,
-          text: 'Option 1',
-          support: 30,
-        },
-        {
-          id: 1,
-          text: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
-          support: 70,
-        }]
-      }
-    },
+    props: ['proposal']
   }
 </script>
 
 <style scoped>
   @import '../../../toolkit/shared-styles.css';
   .proposal {
-    background-color: white!important;
+    background-color: white !important;
     border: 1px solid #e8e8e8;
     padding: 10px 20px;
     margin-bottom: 20px;
@@ -83,7 +74,7 @@
   }
   .proposal ul li progress[value]::-webkit-progress-value {
     background-color: var(--aragon);
-    border-radius: 2px; 
+    border-radius: 2px;
   }
   .proposal ul li span {
     color: var(--grey600);
