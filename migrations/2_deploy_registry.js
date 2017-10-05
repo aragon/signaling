@@ -9,7 +9,13 @@ module.exports = function(deployer, network, accounts) {
         return MiniMeToken.new('0x00', '0x00', 0, 'Test Token', 18, 'TT', true)
                 .then(t => {
                     token = t
-                    return token.generateTokens(accounts[0], 1e19)
+                    token.generateTokens(accounts[0], 1e19)
+
+                    token.generateTokens(accounts[1], 1e19 * 1.2)
+                    token.generateTokens(accounts[2], 1e19 * 2)
+                    token.generateTokens(accounts[3], 1e19 * 5)
+                    token.generateTokens(accounts[4], 1e20)
+                    return true
                 })
     }).then(() => {
         console.log('deploying signal registry with token', token.address)
