@@ -45,7 +45,7 @@ module.exports = function(deployer, network, accounts) {
           data.title,
           data.options.length,
           data.options.map(o => o[1]).join('\n'),
-          Date.now() + 60 * 60 * 24 * (i + 1)
+          Math.round(Date.now() / 1000) + 60 * 60 * 24 * (i + 1)
         )
 
         data.options.map(opt => opt[0]).map((voters, option) => {
@@ -54,7 +54,7 @@ module.exports = function(deployer, network, accounts) {
             .then(address => Signal.at(address))
             .then(signal => {
               voters.forEach(voter => {
-                signal.signal(option + 1, {from: accounts[voter]})
+                signal.signal(option + 1, { from: accounts[voter] })
               })
             })
         })

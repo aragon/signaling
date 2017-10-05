@@ -78,7 +78,7 @@ const fetchSignals = async ids =>
           total: optionsSupport[i],
           support: totalVoters ? optionsSupport[i] / totalVoters : 0,
         })),
-        closes: new Date(num(closes) * 1000),
+        closes: num(closes) * 1000,
         snapshotBlock: num(snapshotBlock),
       }
     })
