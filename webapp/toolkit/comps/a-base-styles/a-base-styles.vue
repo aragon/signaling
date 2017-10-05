@@ -37,6 +37,7 @@
   body {
     @apply --text-normal;
     font-family: overpass, sans-serif;
+    color: var(--grey700);
     background: #eef7f8;
   }
   body,
@@ -58,7 +59,7 @@
   button,
   select,
   input {
-    color: var(--grey700);
+    color: inherit;
   }
   strong,
   b {

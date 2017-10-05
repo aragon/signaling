@@ -27,7 +27,6 @@
     }
     &.strong {
       color: var(--white);
-      font-weight: 600;
       background-image: linear-gradient(
         130deg,
         var(--aragon),

@@ -11,7 +11,7 @@
       </time>
     </header>
     <ul class="options">
-      <li v-for="option in proposal.options" class="option">
+      <li v-for="option in options" class="option">
         <div class="label">{{option.label}}</div>
         <div class="progress">
           <div
@@ -33,6 +33,9 @@
   export default {
     props: ['proposal'],
     computed: {
+      options() {
+        return this.proposal.options.sort((a, b) => b.support - a.support)
+      },
       closesDate() {
         return format(new Date(this.proposal.closes))
       },
