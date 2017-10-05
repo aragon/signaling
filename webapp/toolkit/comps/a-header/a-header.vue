@@ -6,9 +6,9 @@
           <img src="./assets/isotype.svg" width="44" v-once />
           <img src="./assets/logotype.svg" width="99" v-once />
         </a>
-        <div>
-        <h1>Signaling</h1>
-      </div>
+        <div v-if="title" class="title">
+          <h1>{{title}}</h1>
+        </div>
         <nav class="nav">
           <ul>
             <li v-for="item in menuItems">
@@ -33,7 +33,8 @@
       'a-button': aButton
     },
     props: {
-      menuItems: Array
+      menuItems: Array,
+      title: String
     }
   }
 </script>
@@ -43,7 +44,6 @@
   .header {
     background: var(--white);
     border-bottom: 1px solid #e8e8e8;
-    margin-bottom: 30px;
     & .button {
       margin-left: 10px;
     }
@@ -63,11 +63,11 @@
   .header-in > div:first-child {
     align-items: stretch;
   }
-  .header-in h1 {
+  .title {
+    display: flex;
+    align-items: center;
     font-size: 20px;
-    margin-left: 38px;
-    margin-top: 18px;
-    font-weight: normal;
+    margin-left: 40px;
   }
   .logo {
     display: flex;

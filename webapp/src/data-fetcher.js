@@ -52,15 +52,7 @@ const signalToProposal = ({
   symbol,
   token,
   totalSupport,
-}) => ({
-  id,
-  title,
-  options,
-  closes,
-  symbol,
-  token,
-  totalSupport,
-})
+}) => ({ id, title, options, closes, symbol, token, totalSupport })
 
 // Assemble the proposals: GitHub issues + web3 signals (optional)
 const proposals = (issues, signals) => {

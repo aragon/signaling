@@ -23,6 +23,9 @@
 
 <style scoped>
   @import '../../shared-styles.css';
+  .wrapper {
+    padding: 0 40px;
+  }
   .content {
     margin: 0 auto;
     width: 100%;

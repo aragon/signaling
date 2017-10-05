@@ -21,6 +21,12 @@
   --cols10: 950px;
   --cols12: 1146px;
 
+  --text-small: {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.2;
+  }
+
   --text-normal: {
     font-size: 14px;
     font-weight: 400;

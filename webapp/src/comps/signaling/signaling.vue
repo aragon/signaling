@@ -1,7 +1,20 @@
 <template>
   <div class="signaling">
     <a-base-styles />
-    <a-header />
+    <a-header title="Signaling" />
+    <a-section>
+      <div class="welcome">
+        <p>
+          Welcome on the Aragon Signaling
+          <abbr title="Decentralized Application">ĐApp</abbr>, which allows the
+          community to bring new ideas and and support them, following the
+          principles of the
+          <a href="https://blog.aragon.one/aragons-community-governance-model-2971df8f7817">
+            Aragon Governance Model
+          </a>.
+        </p>
+      </div>
+    </a-section>
     <a-section>
       <div>
         <proposal
@@ -44,14 +57,13 @@
 
 <style scoped>
   @import '../../../toolkit/shared-styles.css';
-  .signaling .logo {
-    width: 256px;
-    display: inline-block;
-    vertical-align: middle;
+  .welcome {
+    font-size: 24px;
+    font-weight: 200;
+    line-height: 2;
+    margin: 60px 10px;
   }
-  .signaling h1 {
-    margin: 100px 0;
-    text-align: right;
-    display: inline-block;
+  .signaling .proposal {
+    margin-bottom: 40px;
   }
 </style>

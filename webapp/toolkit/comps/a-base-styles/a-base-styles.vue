@@ -34,6 +34,11 @@
   *:after {
     box-sizing: border-box;
   }
+  body {
+    @apply --text-normal;
+    font-family: overpass, sans-serif;
+    background: #eef7f8;
+  }
   body,
   button,
   select,
@@ -44,8 +49,9 @@
   h4,
   h5,
   h6 {
-    font-family: overpass, sans-serif;
-    @apply --text-normal;
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
   }
   body,
   a,
@@ -69,8 +75,5 @@
   h6 {
     margin: 0;
     padding: 0;
-  }
-  body {
-    background: #eef7f8;
   }
 </style>
