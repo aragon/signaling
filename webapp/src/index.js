@@ -1,3 +1,4 @@
+import 'babel-polyfill'
 import Vue from 'vue'
 import signaling from 'comps/signaling/signaling.vue'
 

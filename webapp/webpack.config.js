@@ -1,8 +1,30 @@
 const path = require('path')
+const webpack = require('webpack')
+const CleanWebpackPlugin = require('clean-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CompressionPlugin = require('compression-webpack-plugin')
+
+const plugins = () => {
+  const activePlugins = [
+    new HtmlWebpackPlugin({
+      title: 'Aragon Signaling',
+      favicon: './toolkit/comps/a-header/assets/isotype.svg',
+    }),
+    new CleanWebpackPlugin(['dist']),
+  ]
+
+  if (process.env.NODE_ENV !== 'production') {
+    return activePlugins
+  }
+
+  return activePlugins.concat([
+    new webpack.optimize.UglifyJsPlugin({ parallel: true }),
+    new CompressionPlugin(),
+  ])
+}
 
 module.exports = {
-  entry: './src/index.js',
+  entry: ['./src/index.js'],
   devtool: 'inline-source-map',
   module: {
     rules: [
@@ -21,6 +43,11 @@ module.exports = {
           },
         ],
       },
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: 'babel-loader',
+      },
     ],
   },
   resolve: {
@@ -30,10 +57,7 @@ module.exports = {
       toolkit: path.resolve(__dirname, 'toolkit/'),
     },
   },
-  plugins: [new HtmlWebpackPlugin({
-    title: 'Aragon Signaling',
-    favicon: './toolkit/comps/a-header/assets/isotype.svg'
-  })],
+  plugins: plugins(),
   output: {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist'),
