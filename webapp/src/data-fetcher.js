@@ -71,19 +71,7 @@ const proposals = (issues, signals) => {
   }))
 }
 
-// Initialize the data fetcher
-//
-// The callback need to be called with two parameters: 
-//  - The type of the update (string)
-//  - The data of the update (e.g. the proposals)
-export default async cb => {
-  const cachedIssues = fromCache('issues')
-  const cachedSignals = fromCache('signals')
-
-  if (cachedIssues) {
-    cb('proposals', proposals(cachedIssues, cachedSignals))
-  }
-
+const fetchProposals = async cb => {
   cb('status', 'fetching-from-github')
 
   const issues = await getIssues()
@@ -98,4 +86,37 @@ export default async cb => {
 
     cb('status', 'done')
   })
+}
+
+// Initialize the data fetcher
+//
+// The `notify` callback receives two parameters:
+//
+//   - The type of the update, as a string
+//   - The associated data
+//
+export default async notify => {
+  const initFetchProposals = async () => {
+    const cachedIssues = fromCache('issues')
+    const cachedSignals = fromCache('signals')
+
+    console.log('???')
+
+    if (cachedIssues) {
+      notify('proposals', proposals(cachedIssues, cachedSignals))
+    }
+
+    notify('status', 'fetching-from-github')
+    const issues = await getIssues()
+    notify('proposals', proposals(issues, cachedSignals))
+
+    notify('status', 'fetching-from-web3')
+    onSignalsUpdate(signals => {
+      notify('proposals', proposals(issues, signals))
+      notify('status', 'done')
+      setTimeout(initFetchProposals, 10000)
+    })
+  }
+
+  initFetchProposals()
 }

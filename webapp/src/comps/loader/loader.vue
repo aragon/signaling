@@ -30,7 +30,7 @@
     methods: {
       loaderStyle(progress) {
         return {
-          bottom: lerp(-30, 20, progress) + 'px',
+          bottom: lerp(-10, 20, progress) + 'px',
           opacity: progress
         }
       },
