@@ -100,8 +100,6 @@ export default async notify => {
     const cachedIssues = fromCache('issues')
     const cachedSignals = fromCache('signals')
 
-    console.log('???')
-
     if (cachedIssues) {
       notify('proposals', proposals(cachedIssues, cachedSignals))
     }
