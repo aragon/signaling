@@ -114,7 +114,7 @@ export default async notify => {
     onSignalsUpdate(signals => {
       notify('proposals', proposals(issues, signals))
       notify('status', 'done')
-      setTimeout(initFetchProposals, 10000)
+      setTimeout(initFetchProposals, 30 * 1000)
     })
   }
 
