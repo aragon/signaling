@@ -54,6 +54,25 @@
     font-weight: inherit;
     line-height: inherit;
   }
+  .text-content a,
+  .text-content abbr {
+    position: relative;
+    text-decoration: none;
+  }
+  .text-content a:after,
+  .text-content abbr:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.12em;
+    border-color: inherit;
+    border-bottom-width: 0.05em;
+    border-bottom-style: solid;
+  }
+  .text-content abbr:after {
+    border-bottom-style: dotted;
+  }
   body,
   a,
   button,

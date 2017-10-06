@@ -5,12 +5,12 @@
     <main class="main">
       <a-section>
         <div class="welcome">
-          <p>
+          <p class="text-content">
             Welcome on the Aragon Signaling
             <abbr title="Decentralized Application">ĐApp</abbr>, which allows the
             community to bring new ideas and support them, following the
-            principles of the
-            <a href="https://blog.aragon.one/aragons-community-governance-model-2971df8f7817" target="_blank" rel="noopener">Aragon Governance Model</a>.
+            <a href="https://blog.aragon.one/aragons-community-governance-model-2971df8f7817" target="_blank" rel="noopener">Aragon Governance Model</a>
+            principles.
           </p>
         </div>
       </a-section>
