@@ -1,7 +1,9 @@
 import 'babel-polyfill'
 import Vue from 'vue'
+import VueMotion from 'vue-motion'
 import app from 'comps/app/app.vue'
 
+Vue.use(VueMotion)
 Vue.config.productionTip = false
 
 const initAppElement = (id = '#app') => {

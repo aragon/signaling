@@ -5008,6 +5008,10 @@ vue-loader@^13.0.5:
     vue-style-loader "^3.0.0"
     vue-template-es2015-compiler "^1.5.3"
 
+vue-motion@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/vue-motion/-/vue-motion-0.2.0.tgz#5ce9441eea605624d66d0d94688d1f8ef26bfe6f"
+
 vue-router@^2.7.0:
   version "2.7.0"
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-2.7.0.tgz#16d424493aa51c3c8cce8b7c7210ea4c3a89aff1"

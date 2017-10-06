@@ -8,7 +8,7 @@
           <p>
             Welcome on the Aragon Signaling
             <abbr title="Decentralized Application">ĐApp</abbr>, which allows the
-            community to bring new ideas and and support them, following the
+            community to bring new ideas and support them, following the
             principles of the
             <a href="https://blog.aragon.one/aragons-community-governance-model-2971df8f7817" target="_blank" rel="noopener">Aragon Governance Model</a>.
           </p>
@@ -24,15 +24,17 @@
         </div>
       </a-section>
     </main>
+    <loader :text="loading" />
     <a-pre-footer />
     <a-footer light />
   </div>
 </template>
 
 <script>
-  import { onProposalsUpdate } from 'src/data-fetcher'
+  import dataFetcher from 'src/data-fetcher'
   import { aBaseStyles, aHeader, aSection } from 'toolkit'
   import proposal from '../proposal/proposal.vue'
+  import loader from '../loader/loader.vue'
   import aFooter from '../footer/footer.vue'
   import aPreFooter from '../pre-footer/pre-footer.vue'
 
@@ -43,11 +45,25 @@
       aFooter,
       aPreFooter,
       aSection,
+      loader,
       proposal
     },
     data() {
       return {
-        proposals: []
+        fetcherStatus: '',
+        proposals: [],
+      }
+    },
+    computed: {
+      loading() {
+        const status = this.fetcherStatus
+        if (status === 'fetching-from-github') {
+          return 'Fetching the proposals from GitHub…'
+        }
+        if (status === 'fetching-from-web3') {
+          return 'Fetching the votes from the Ethereum network…'
+        }
+        return ''
       }
     },
     methods: {
@@ -56,7 +72,14 @@
       }
     },
     created() {
-      onProposalsUpdate(this.handleProposalUpdate)
+      dataFetcher((type, data) => {
+        if (type === 'proposals') {
+          this.handleProposalUpdate(data)
+        }
+        if (type === 'status') {
+          this.fetcherStatus = data
+        }
+      })
     }
   }
 </script>
