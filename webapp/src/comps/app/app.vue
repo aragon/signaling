@@ -15,11 +15,12 @@
         </div>
       </a-section>
       <a-section>
-        <div>
+        <div class="app-proposal" v-for="(proposal, index) in proposals">
           <proposal
-            v-for="proposal in proposals"
             :proposal="proposal"
+            :opened="index === openedProposal"
             :key="proposal.url"
+            @click.native="openProposal(index)"
           />
         </div>
       </a-section>
@@ -52,6 +53,7 @@
       return {
         fetcherStatus: '',
         proposals: [],
+        openedProposal: -1
       }
     },
     computed: {
@@ -67,6 +69,13 @@
       }
     },
     methods: {
+      openProposal(index) {
+        if (this.openedProposal === index) {
+          this.openedProposal = -1
+          return
+        }
+        this.openedProposal = index
+      },
       handleProposalUpdate(proposals) {
         this.proposals = proposals
       }
@@ -92,7 +101,7 @@
     line-height: 2;
     margin: 80px 10px;
   }
-  .app .proposal {
+  .app .app-proposal {
     margin-bottom: 40px;
   }
   .app .main {
