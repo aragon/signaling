@@ -7,20 +7,26 @@
         <div class="welcome">
           <p class="text-content">
             Welcome on the Aragon Signaling
-            <abbr title="Decentralized Application">ĐApp</abbr>, which allows the
-            community to bring new ideas and support them, following the
-            <a href="https://blog.aragon.one/aragons-community-governance-model-2971df8f7817" target="_blank" rel="noopener">Aragon Governance Model</a>
+            <abbr title="Decentralized Application">ĐApp</abbr>, which allows
+            the community to bring new ideas and support them, following the
+            <a
+              href="https://blog.aragon.one/aragons-community-governance-model-2971df8f7817"
+              target="_blank"
+              rel="noopener"
+            >
+              Aragon Governance Model
+            </a>
             principles.
           </p>
         </div>
       </a-section>
       <a-section>
-        <div class="app-proposal" v-for="(proposal, index) in proposals">
+        <div class="app-proposal" v-for="proposal in proposals">
           <proposal
             :proposal="proposal"
-            :opened="index === openedProposal"
-            :key="proposal.url"
-            @click.native="openProposal(index)"
+            :opened="proposal.id === activeProposal"
+            :key="proposal.id"
+            @click.native="openProposal(proposal.id)"
           />
         </div>
       </a-section>
@@ -32,6 +38,7 @@
 </template>
 
 <script>
+  import createHistory from 'history/createBrowserHistory'
   import dataFetcher from 'src/data-fetcher'
   import { aBaseStyles, aHeader, aSection } from 'toolkit'
   import proposal from '../proposal/proposal.vue'
@@ -53,7 +60,7 @@
       return {
         fetcherStatus: '',
         proposals: [],
-        openedProposal: -1
+        activeProposal: -1
       }
     },
     computed: {
@@ -69,18 +76,27 @@
       }
     },
     methods: {
-      openProposal(index) {
-        if (this.openedProposal === index) {
-          this.openedProposal = -1
-          return
+      openProposal(id) {
+        if (this.activeProposal === id) {
+          this.history.push('/')
+        } else {
+          this.history.push('/proposal/' + id, { id })
         }
-        this.openedProposal = index
       },
       handleProposalUpdate(proposals) {
         this.proposals = proposals
+      },
+      handleLocationUpdate(location, initial) {
+        const proposal = location.pathname.match(/^\/proposal\/([1-9][0-9]*)$/)
+        this.activeProposal = proposal? parseInt(proposal[1], 10) : -1
+        if (initial) {
+          this.animated = true
+        }
       }
     },
     created() {
+      this.history = createHistory()
+      this.unlistenHistory = this.history.listen(this.handleLocationUpdate)
       dataFetcher((type, data) => {
         if (type === 'proposals') {
           this.handleProposalUpdate(data)
@@ -89,6 +105,10 @@
           this.fetcherStatus = data
         }
       })
+      this.handleLocationUpdate(this.history.location, true)
+    },
+    destroyed() {
+      this.unlistenHistory()
     }
   }
 </script>

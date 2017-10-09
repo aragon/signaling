@@ -1,9 +1,5 @@
 <template>
-  <Motion
-    tag="div"
-    v-bind:values="motionData"
-    v-bind:spring="spring"
-  >
+  <Motion tag="div" v-bind:values="motionData" v-bind:spring="openSpring">
     <template scope="props">
       <section
         class="proposal"
@@ -24,21 +20,37 @@
               {{ closesRelative }}
             </time>
           </header>
-          <ul class="options" v-show="options.length">
-            <li v-for="option in options" class="option">
-              <div class="label">{{option.label}}</div>
-              <div class="progress">
-                <div
-                  class="progress-bar"
-                  :style="`transform: scaleX(${option.support})`"
-                />
+          <div class="content">
+            <div class="first-part">
+            </div>
+            <div class="second-part" :style="getSecondPartStyle(props.openProgress)">
+              <div>
+                <ul class="options" v-show="options.length">
+                  <li v-for="option in options" class="option">
+                    <div class="label">
+                      <span>{{option.label}}</span>
+                    </div>
+                    <div class="progress">
+                      <div
+                        class="progress-bar"
+                        :style="`transform: scaleX(${option.support})`"
+                      />
+                    </div>
+                    <div class="total">
+                      {{option.total}}
+                      {{proposal.symbol}}
+                    </div>
+                  </li>
+                </ul>
               </div>
-              <div class="total">
-                {{option.total}}
-                {{proposal.symbol}}
+              <div
+                class="second-part-line"
+                :style="getSecondPartLineStyle(props.openProgress)"
+              >
+                
               </div>
-            </li>
-          </ul>
+            </div>
+          </div>
         </div>
       </section>
     </template>
@@ -53,7 +65,7 @@
     data() {
       return {
         rect: null,
-        spring: {
+        openSpring: {
           stiffness: 310,
           damping: 30
         }
@@ -66,7 +78,7 @@
         }
         return {
           width: this.rect.width + 'px',
-          height: (this.rect.height + (100 * progress)) + 'px',
+          height: this.rect.height + 100 * progress + 'px'
         }
       },
       getProposalInStyle(progress) {
@@ -80,9 +92,22 @@
           left: distance + 'px',
           right: distance + 'px',
           bottom: distance + 'px',
-          boxShadow: `0 3px 20px rgba(113, 113, 113, ${progress * 0.3})`,
+          boxShadow: `0 3px 20px rgba(113, 113, 113, ${progress * 0.3})`
         }
       },
+      getSecondPartStyle(progress) {
+        return {
+          marginTop: 20 * progress + 'px',
+          width: lerp(100, 40, progress) + '%',
+        }
+      },
+      getSecondPartLineStyle(progress) {
+        return {
+          opacity: progress,
+          height: progress * 90 + '%',
+          top: lerp(50, 5, progress) + '%'
+        }
+      }
     },
     watch: {
       opened(opened, oldOpened) {
@@ -93,7 +118,6 @@
     },
     computed: {
       motionData() {
-        console.log('COMPUTED', this.opened)
         return {
           openProgress: Number(this.opened)
         }
@@ -170,6 +194,22 @@
     white-space: nowrap;
     color: var(--grey600);
   }
+  .content {
+    display: flex;
+    justify-content: flex-end;
+    height: 100%;
+  }
+  .second-part {
+    position: relative;
+  }
+  .second-part-line {
+    position: absolute;
+    left: -50px;
+    border-left: 1px solid var(--grey400);
+  }
+  .options {
+    width: 100%;
+  }
   .option {
     display: flex;
     flex-wrap: nowrap;
@@ -177,12 +217,16 @@
   }
   .label {
     display: flex;
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: 15%;
     align-items: center;
-    width: 20%;
+    margin-right: 20px;
+  }
+  .label span {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    margin-right: 20px;
   }
   .progress {
     overflow: hidden;
@@ -198,6 +242,8 @@
   }
   .total {
     display: flex;
+    flex-grow: 0;
+    flex-shrink: 0;
     align-items: center;
     justify-content: flex-end;
     min-width: 5em;
