@@ -8,14 +8,13 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const PRODUCTION = process.env.NODE_ENV === 'production'
 
 const plugins = () => {
-
   const base = [
     new webpack.DefinePlugin({
       'process.env': { NODE_ENV: '"production"' },
     }),
     new HtmlWebpackPlugin({
       title: 'Aragon Signaling',
-      favicon: './toolkit/comps/a-header/assets/isotype.svg',
+      favicon: './favicon.svg',
     }),
     new CleanWebpackPlugin(['dist']),
   ]

@@ -9,6 +9,7 @@
     "build:production": "NODE_ENV=production webpack"
   },
   "dependencies": {
+    "@aragon/ui": "*",
     "axios": "^0.16.2",
     "date-fns": "^1.28.5",
     "truffle-contract": "^3.0.0",

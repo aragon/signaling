@@ -150,7 +150,7 @@
 </script>
 
 <style scoped>
-  @import '../../../toolkit/shared-styles.css';
+  @import '../../shared-styles.css';
   .proposal {
     position: relative;
   }

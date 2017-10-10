@@ -1,9 +1,9 @@
 <template>
   <div class="app">
-    <a-base-styles />
-    <a-header title="Signaling" />
+    <UIBaseStyles />
+    <UIHeader title="Signaling" />
     <main class="main">
-      <a-section>
+      <UISection>
         <div class="welcome">
           <p class="text-content">
             Welcome on the Aragon Signaling
@@ -19,8 +19,8 @@
             principles.
           </p>
         </div>
-      </a-section>
-      <a-section>
+      </UISection>
+      <UISection>
         <div class="app-proposal" v-for="proposal in proposals">
           <proposal
             :proposal="proposal"
@@ -29,31 +29,35 @@
             @click.native="openProposal(proposal.id)"
           />
         </div>
-      </a-section>
+      </UISection>
     </main>
-    <loader :text="loading" />
-    <a-pre-footer />
-    <a-footer light />
+    <UILoader :text="loading" />
+    <UIPreFooter />
+    <UIFooter light />
   </div>
 </template>
 
 <script>
+  import {
+    UIBaseStyles,
+    UIFooter,
+    UIHeader,
+    UILoader,
+    UIPreFooter,
+    UISection,
+  } from '@aragon/ui'
   import createHistory from 'history/createBrowserHistory'
   import dataFetcher from 'src/data-fetcher'
-  import { aBaseStyles, aHeader, aSection } from 'toolkit'
   import proposal from '../proposal/proposal.vue'
-  import loader from '../loader/loader.vue'
-  import aFooter from '../footer/footer.vue'
-  import aPreFooter from '../pre-footer/pre-footer.vue'
 
   export default {
     components: {
-      aBaseStyles,
-      aHeader,
-      aFooter,
-      aPreFooter,
-      aSection,
-      loader,
+      UIBaseStyles,
+      UIHeader,
+      UISection,
+      UIFooter,
+      UIPreFooter,
+      UILoader,
       proposal
     },
     data() {
@@ -114,7 +118,7 @@
 </script>
 
 <style scoped>
-  @import '../../../toolkit/shared-styles.css';
+  @import '../../shared-styles.css';
   .welcome {
     font-size: 24px;
     font-weight: 200;
