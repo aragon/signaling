@@ -4,6 +4,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CompressionPlugin = require('compression-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const uiWebpackBase = require('@aragon/ui/webpack-base')
 
 const PRODUCTION = process.env.NODE_ENV === 'production'
 
@@ -33,45 +34,16 @@ const plugins = () => {
   return base.concat(production)
 }
 
-module.exports = {
+module.exports = uiWebpackBase(webpack, __dirname, {
   entry: ['./src/index.js'],
   devtool: 'inline-source-map',
   devServer: {
     historyApiFallback: true,
   },
-  module: {
-    rules: [
-      {
-        test: /\.vue$/,
-        loader: 'vue-loader',
-        options: {
-          postcss: [require('postcss-cssnext')()],
-          extractCSS: PRODUCTION,
-        },
-      },
-      {
-        test: /\.(png|jpg|gif|svg|woff|woff2)$/,
-        use: [
-          {
-            loader: 'url-loader',
-            options: {
-              limit: 8192,
-            },
-          },
-        ],
-      },
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: 'babel-loader',
-      },
-    ],
-  },
   resolve: {
     alias: {
       src: path.resolve(__dirname, 'src/'),
       comps: path.resolve(__dirname, 'src/comps/'),
-      toolkit: path.resolve(__dirname, 'toolkit/'),
     },
   },
   plugins: plugins(),
@@ -80,4 +52,4 @@ module.exports = {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist'),
   },
-}
+})
