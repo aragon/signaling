@@ -1,11 +1,15 @@
 import axios from 'axios'
-import FetchSignalsWorker from 'worker-loader!./fetch-signals.js'
+import Web3SignalsWorker from './web3-signals.worker.js'
+import MarkdownIt from 'markdown-it'
 
 const GITHUB_API_ROOT = 'https://api.github.com'
 
 const githubEndpoints = {
   issues: () => `${GITHUB_API_ROOT}/repos/aragon/governance/issues?state=all`,
+  issue: id => `${GITHUB_API_ROOT}/repos/aragon/governance/issues/${id}`,
 }
+
+const md = new MarkdownIt()
 
 const fromCache = key => {
   try {
@@ -25,9 +29,14 @@ const getIssues = async () => {
   return issues
 }
 
+const getIssueContent = async id => {
+  const res = await axios.get(githubEndpoints.issue(id))
+  return md.render(res.data.body)
+}
+
 // Cache and return signals from web3
 const onSignalsUpdate = cb => {
-  const fetchSignals = new FetchSignalsWorker()
+  const fetchSignals = new Web3SignalsWorker()
   fetchSignals.addEventListener('message', ({ data: { signals } }) => {
     if (!signals) {
       return
@@ -88,33 +97,43 @@ const fetchProposals = async cb => {
   })
 }
 
-// Initialize the data fetcher
+// Fetch the proposals from GitHub and Web3.
 //
-// The `notify` callback receives two parameters:
+// The `emit` callback receives two parameters:
 //
 //   - The type of the update, as a string
 //   - The associated data
 //
-export default async notify => {
-  const initFetchProposals = async () => {
+// The `every` parameter is the number of milliseconds
+// before fetching the data again (default is disabled: -1).
+//
+export const initProposalsFetcher = async (emit, every = -1) => {
+  const start = async () => {
     const cachedIssues = fromCache('issues')
     const cachedSignals = fromCache('signals')
 
     if (cachedIssues) {
-      notify('proposals', proposals(cachedIssues, cachedSignals))
+      emit('proposals', proposals(cachedIssues, cachedSignals))
     }
 
-    notify('status', 'fetching-from-github')
+    emit('status', 'fetching-from-github')
     const issues = await getIssues()
-    notify('proposals', proposals(issues, cachedSignals))
+    emit('proposals', proposals(issues, cachedSignals))
 
-    notify('status', 'fetching-from-web3')
+    emit('status', 'fetching-from-web3')
     onSignalsUpdate(signals => {
-      notify('proposals', proposals(issues, signals))
-      notify('status', 'done')
-      setTimeout(initFetchProposals, 30 * 1000)
+      emit('proposals', proposals(issues, signals))
+      emit('status', 'done')
+
+      if (every > -1) {
+        setTimeout(start, every)
+      }
     })
   }
+  start()
+}
 
-  initFetchProposals()
+// Fetch a single proposal
+export const fetchProposalContent = async id => {
+  return await getIssueContent(id)
 }

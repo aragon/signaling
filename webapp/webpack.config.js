@@ -37,8 +37,14 @@ const plugins = () => {
 module.exports = uiWebpackBase(webpack, __dirname, {
   entry: ['./src/index.js'],
   devtool: 'inline-source-map',
-  devServer: {
-    historyApiFallback: true,
+  devServer: { historyApiFallback: true },
+  module: {
+    rules: [
+      {
+        test: /\.worker\.js/,
+        loader: 'worker-loader',
+      },
+    ],
   },
   resolve: {
     alias: {

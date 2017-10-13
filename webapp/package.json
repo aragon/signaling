@@ -12,6 +12,7 @@
     "@aragon/ui": "*",
     "axios": "^0.16.2",
     "date-fns": "^1.28.5",
+    "markdown-it": "^8.4.0",
     "truffle-contract": "^3.0.0",
     "vue": "^2.4.4",
     "vue-motion": "^0.2.0",

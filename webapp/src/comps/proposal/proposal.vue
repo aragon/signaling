@@ -1,17 +1,35 @@
 <template>
-  <Motion tag="div" v-bind:values="motionData" v-bind:spring="openSpring">
+  <Motion
+    tag="div"
+    v-bind:values="motionData"
+    v-bind:spring="openSpring"
+    @motion-end="handleOpenEnd"
+  >
     <template scope="props">
       <section
         class="proposal"
         :class="{'proposal-opened': opened}"
         :style="getProposalStyle(props.openProgress)"
+        @click="handleProposalClick"
       >
         <div
+          ref="proposalIn"
           class="proposal-in"
           :style="getProposalInStyle(props.openProgress)"
         >
-          <header class="header">
-            <h1 class="title">{{ proposal.title }}</h1>
+          <a
+            class="proposal-close"
+            role="button"
+            :style="getCloseStyle(props.openProgress)"
+            @click="handleClose"
+          >
+            close
+          </a>
+          <header
+            class="header"
+            :style="getHeaderStyle(props.openProgress)"
+          >
+            <h1 class="title">{{proposal.title}}</h1>
             <time
               class="closes"
               :title="closesDateHuman"
@@ -22,6 +40,11 @@
           </header>
           <div class="content">
             <div class="first-part">
+              <div
+                class="first-part-content"
+                v-show='content && props.openProgress === 1'
+                v-html='content'
+              />
             </div>
             <div class="second-part" :style="getSecondPartStyle(props.openProgress)">
               <div>
@@ -46,9 +69,7 @@
               <div
                 class="second-part-line"
                 :style="getSecondPartLineStyle(props.openProgress)"
-              >
-                
-              </div>
+              />
             </div>
           </div>
         </div>
@@ -61,17 +82,31 @@
   import { format, distanceInWordsToNow } from 'date-fns'
   import { lerp } from '../../utils'
   export default {
-    props: ['proposal', 'opened'],
+    props: {
+      proposal: Object,
+      content: String,
+      opened: Boolean,
+    },
     data() {
       return {
         rect: null,
         openSpring: {
           stiffness: 310,
-          damping: 30
+          damping: 30,
+          precision: 0.01
         }
       }
     },
     methods: {
+      handleProposalClick() {
+        if (!this.opened) {
+          this.$emit('requestOpen')
+        }
+      },
+      handleClose(e) {
+        e.stopPropagation()
+        this.$emit('requestClose')
+      },
       getProposalStyle(progress) {
         if (!this.rect) {
           return {}
@@ -85,36 +120,61 @@
         if (!this.rect) {
           return {}
         }
-        const distance = lerp(1, -120, progress)
+        const hdistance = lerp(1, -120, progress)
         return {
           position: 'absolute',
-          top: distance + 'px',
-          left: distance + 'px',
-          right: distance + 'px',
-          bottom: distance + 'px',
+          top: - lerp(0, window.innerHeight - this.rect.height, progress) / 2 + 'px',
+          height: lerp(this.rect.height, window.innerHeight - 40, progress) + 'px',
+          left: hdistance / 2 + 'px',
+          right: hdistance / 2 + 'px',
           boxShadow: `0 3px 20px rgba(113, 113, 113, ${progress * 0.3})`
+        }
+      },
+      getCloseStyle(progress) {
+        return {
+          display: progress > 0? 'block' : 'none',
+          opacity: progress,
+        }
+      },
+      getHeaderStyle(progress) {
+        return {
+          paddingBottom: 20 + 20 * progress  + 'px'
         }
       },
       getSecondPartStyle(progress) {
         return {
-          marginTop: 20 * progress + 'px',
           width: lerp(100, 40, progress) + '%',
         }
       },
       getSecondPartLineStyle(progress) {
         return {
           opacity: progress,
-          height: progress * 90 + '%',
-          top: lerp(50, 5, progress) + '%'
+          height: progress * 100 + '%',
+          top: lerp(50, 0, progress) + '%'
+        }
+      },
+      handleOpened() {
+        if (!this.opened) {
+          return
+        }
+        if (!this.rect) {
+          this.rect = this.$el.getBoundingClientRect()
+        }
+          this.$refs.proposalIn.scrollIntoView({ behavior: 'smooth' })
+      },
+      handleOpenEnd() {
+        if (this.opened) {
+          this.$refs.proposalIn.scrollIntoView({ behavior: 'smooth' })
         }
       }
     },
     watch: {
-      opened(opened, oldOpened) {
-        if (opened && !this.rect) {
-          this.rect = this.$el.getBoundingClientRect()
-        }
+      opened() {
+        this.handleOpened()
       }
+    },
+    mounted() {
+      this.handleOpened()
     },
     computed: {
       motionData() {
@@ -154,13 +214,19 @@
   .proposal {
     position: relative;
   }
+  .proposal-close {
+    position: absolute;
+    z-index: 2;
+    top: 10px;
+    right: 15px;
+    text-decoration: underline;
+  }
   .proposal-in {
     position: relative;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-
     border: 1px solid #e8e8e8;
     padding: 40px;
     border-radius: 3px;
@@ -180,6 +246,8 @@
   .header {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
   }
   .header + .options {
     margin-top: 30px;
@@ -197,14 +265,40 @@
   .content {
     display: flex;
     justify-content: flex-end;
-    height: 100%;
+    height: calc(100% - 60px);
+  }
+  .first-part-content {
+    height: calc(100%);
+    margin-right: 70px;
+    padding-right: 30px;
+    padding-left: 20px;
+    overflow-y: scroll;
+  }
+  .first-part-content >>> p,
+  .first-part-content >>> ul {
+    margin: 20px 0;
+  }
+  .first-part-content >>> ul ul {
+    margin-left: 20px;
+  }
+  .first-part-content >>> li {
+    line-height: 1.5;
+  }
+  .first-part-content >>> h2,
+  .first-part-content >>> h3,
+  .first-part-content >>> h4,
+  .first-part-content >>> h5,
+  .first-part-content >>> h6 {
+    margin: 20px 0;
+    font-weight: 600;
   }
   .second-part {
+    flex-shrink: 0;
     position: relative;
   }
   .second-part-line {
     position: absolute;
-    left: -50px;
+    left: -40px;
     border-left: 1px solid var(--grey400);
   }
   .options {

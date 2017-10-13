@@ -24,9 +24,11 @@
         <div class="app-proposal" v-for="proposal in proposals">
           <proposal
             :proposal="proposal"
+            :content="proposal.id === activeProposal ? proposalContent : ''"
             :opened="proposal.id === activeProposal"
             :key="proposal.id"
-            @click.native="openProposal(proposal.id)"
+            @requestOpen="openProposal(proposal.id)"
+            @requestClose="closeProposal(proposal.id)"
           />
         </div>
       </UISection>
@@ -46,9 +48,10 @@
     UIPreFooter,
     UISection,
   } from '@aragon/ui'
-  import createHistory from 'history/createBrowserHistory'
-  import dataFetcher from 'src/data-fetcher'
+
   import proposal from '../proposal/proposal.vue'
+  import createHistory from 'history/createBrowserHistory'
+  import { initProposalsFetcher, fetchProposalContent } from 'src/data-fetcher'
 
   export default {
     components: {
@@ -62,53 +65,70 @@
     },
     data() {
       return {
-        fetcherStatus: '',
+        proposalsStatus: '',
         proposals: [],
-        activeProposal: -1
+        activeProposal: -1,
+        proposalContent: '',
       }
     },
     computed: {
       loading() {
-        const status = this.fetcherStatus
-        if (status === 'fetching-from-github') {
+        if (this.proposalsStatus === 'fetching-from-github') {
           return 'Fetching the proposals from GitHub…'
         }
-        if (status === 'fetching-from-web3') {
+        if (this.proposalsStatus === 'fetching-from-web3') {
           return 'Fetching the votes from the Ethereum network…'
         }
         return ''
       }
     },
-    methods: {
-      openProposal(id) {
-        if (this.activeProposal === id) {
-          this.history.push('/')
+    watch: {
+      activeProposal(activeProposal) {
+        if (activeProposal > -1) {
+          document.body.style.overflow = 'hidden'
         } else {
-          this.history.push('/proposal/' + id, { id })
+          document.body.style.overflow = 'visible'
         }
-      },
-      handleProposalUpdate(proposals) {
-        this.proposals = proposals
-      },
-      handleLocationUpdate(location, initial) {
+      }
+    },
+    methods: {
+      async handleLocationUpdate(location, initial) {
         const proposal = location.pathname.match(/^\/proposal\/([1-9][0-9]*)$/)
         this.activeProposal = proposal? parseInt(proposal[1], 10) : -1
+        this.proposalContent = ''
+
         if (initial) {
           this.animated = true
         }
-      }
+
+        if (this.activeProposal > -1) {
+          this.proposalContent = await fetchProposalContent(
+            this.activeProposal
+          )
+        }
+      },
+      closeProposal(id) {
+        this.history.push('/')
+      },
+      openProposal(id) {
+        this.history.push('/proposal/' + id)
+      },
+      handleProposalsUpdate(proposals) {
+        this.proposals = proposals
+      },
     },
     created() {
       this.history = createHistory()
       this.unlistenHistory = this.history.listen(this.handleLocationUpdate)
-      dataFetcher((type, data) => {
+      initProposalsFetcher((type, data) => {
         if (type === 'proposals') {
-          this.handleProposalUpdate(data)
+          this.handleProposalsUpdate(data)
         }
         if (type === 'status') {
-          this.fetcherStatus = data
+          this.proposalsStatus = data
         }
-      })
+      }, 30 * 1000)
+
       this.handleLocationUpdate(this.history.location, true)
     },
     destroyed() {
