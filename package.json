@@ -15,6 +15,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Jorge Izquierdo (Aragon)",
+  "author": "Aragon Institution MTU <contact@aragon.one>",
+  "contributors": [
+    "Jorge Izquierdo <jorge@aragon.one>",
+    "Pierre Bertet <pierre@aragon.one>"
+  ],
   "license": "GPVv3"
 }
