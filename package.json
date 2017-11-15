@@ -16,5 +16,5 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Jorge Izquierdo (Aragon)",
-  "license": "GPVv3"
+  "license": "GPL-3.0"
 }
