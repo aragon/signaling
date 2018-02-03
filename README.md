@@ -1,4 +1,4 @@
-## Update Jan 2nd, 2017
+## Update Jan 2nd, 2018
 
 This project has been deprecated in favor of just adapting the [Voting app](https://github.com/aragon/aragon-apps/tree/master/apps/voting) frontend to support this usecase. 
 
